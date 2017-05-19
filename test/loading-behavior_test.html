@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>loading-behavior test</title>
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <link rel="import" href="../loading-behavior.html">
+
+    <link rel="import" href="test-component.html"
+  </head>
+  <body>
+    <test-fixture id="basic">
+      <template>
+        <test-component></test-component>
+      </template>
+    </test-fixture>
+
+    <script>
+      suite('loading-behavior', function() {
+        test('instantiating the element works', function() {
+          var element = fixture('basic');
+          assert.equal(element.is, 'test-component');
+        });
+      });
+    </script>
+  </body>
+</html>

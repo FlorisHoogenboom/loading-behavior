@@ -1,0 +1,66 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+`loading-behavior`
+Provides simple functionality to keep track of multiple loading elements.
+
+@demo demo/index.html
+-->
+<script>
+  /**
+   * Use `LoadingBehavior` to implement a custom element that needs to expose
+   * a loading property and has mulitple child elements each with different
+   * loading states.
+   * @polymerBehavior Loadingbehavior
+  **/
+  LoadingBehavior = {
+    properties: {
+      /* Reflects the state of the loading state of the element and all of it's monitored children. */
+      loading:{
+        type: Boolean,
+        reflectToAttribute: true,
+        notify: true,
+        computed: "_getLoadingState(_loadingElements.splices)"
+      },
+
+      /* Array that tracks loading elements */
+      _loadingElements: {
+        type: Array,
+        value: []
+      }
+    },
+
+    /**
+     * Compute whether there are still child elements loading.
+     *
+     * @param {Array} An array of elements that are currently loading, possibly empty.
+     *
+     * @return {boolean} that indicates whether there are still loading children.
+    **/
+    _getLoadingState: function(_loadingElements) {
+      _loadingElements = _loadingElements ? _loadingElements.indexSplices[0].object : [];
+
+      if (!_loadingElements || _loadingElements.length === 0) {
+        return false;
+      }
+      return true;
+    },
+
+    /**
+     * Keep track of any changes in the elements still loading
+    **/
+    loadingChanged: function(event) {
+      event = new Polymer.dom(event);
+      let element = event.rootTarget;
+
+      if(event.event.detail.value &&
+         !this._loadingElements.includes(element))
+      {
+        this.push('_loadingElements', element);
+      } else if ( (index = this._loadingElements.indexOf(element)) >= 0) {
+        this.splice('_loadingElements', index,1);
+      }
+    }
+
+  };
+</script>

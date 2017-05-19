@@ -1,0 +1,22 @@
+<link rel="import" href="../../polymer/polymer.html">
+<link rel="import" href="../paper-button-behavior.html">
+
+<!-- Import the behaviors -->
+<link rel="import" href="../loading-behavior.html" />
+
+<dom-module id="test-component">
+
+  <template>
+    <slot></slot>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'test-component',
+      behaviors: [
+        Loadingbehavior
+      ]
+    });
+  </script>
+
+</dom-module>
