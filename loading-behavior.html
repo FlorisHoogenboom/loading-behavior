@@ -26,7 +26,13 @@ Provides simple functionality to keep track of multiple loading elements.
       /* Array that tracks loading elements */
       _loadingElements: {
         type: Array,
-        value: []
+        value: function() { return []; }
+      }
+    },
+
+    ready: function() {
+      if(this.queue){
+        this.queue.forEach(this.loadingChanged);
       }
     },
 
@@ -50,19 +56,23 @@ Provides simple functionality to keep track of multiple loading elements.
      * Keep track of any changes in the elements still loading
     **/
     loadingChanged: function(event) {
-      // Dirty way of overcoming the problem Polymer might not yet have defined the
-      // _loadingElements property.
-      this._loadingElements = this._loadingElements || [];
+      // First check if _loadingElements is defined already. By Polymers initizalitation order
+      // this need not to be the case if loadingChanged is called.
+      if (!this._loadingElements) {
+        this.queue = this.queue || [];
+        this.queue.push(event);
+      }
+      else {
+        event = new Polymer.dom(event);
+        let element = event.rootTarget;
 
-      event = new Polymer.dom(event);
-      let element = event.rootTarget;
-
-      if(event.event.detail.value &&
-         !this._loadingElements.includes(element))
-      {
-        this.push('_loadingElements', element);
-      } else if ( (index = this._loadingElements.indexOf(element)) >= 0) {
-        this.splice('_loadingElements', index,1);
+        if(event.event.detail.value &&
+           !this._loadingElements.includes(element))
+        {
+          this.push('_loadingElements', element);
+        } else if ( (index = this._loadingElements.indexOf(element)) >= 0) {
+          this.splice('_loadingElements', index,1);
+        }
       }
     }
 
