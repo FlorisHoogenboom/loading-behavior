@@ -50,6 +50,10 @@ Provides simple functionality to keep track of multiple loading elements.
      * Keep track of any changes in the elements still loading
     **/
     loadingChanged: function(event) {
+      // Dirty way of overcoming the problem Polymer might not yet have defined the
+      // _loadingElements property.
+      this._loadingElements = this._loadingElements || [];
+
       event = new Polymer.dom(event);
       let element = event.rootTarget;
 
